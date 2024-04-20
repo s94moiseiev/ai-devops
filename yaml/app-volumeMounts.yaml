@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-volume
+spec:
+  replicas: 1
+  containers:
+  - name: app-volume
+    image: gcr.io/kuar-demo/kuard-amd64:1
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+    - name: data
+      mountPath: /app
+    livenessProbe:
+      httpGet:
+        path: /healthy
+        port: 8080
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 8080
+  volumes:
+  - name: data
+    hostPath:
+      path: /var/lib/app
